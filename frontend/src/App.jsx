@@ -21,7 +21,28 @@ function App() {
     rating: "",
     notes: "",
   });
-
+  const recommendations = {
+  "Self Help": [
+    "Atomic Habits",
+    "Deep Work",
+    "The Power of Habit"
+  ],
+  "Programming": [
+    "Clean Code",
+    "Refactoring",
+    "Design Patterns"
+  ],
+  "Fantasy": [
+    "Harry Potter",
+    "The Hobbit",
+    "Mistborn"
+  ],
+  "Productivity": [
+    "Deep Work",
+    "Essentialism",
+    "Eat That Frog"
+  ]
+};
   const loadBooks = async () => {
     const res = await axios.get("http://127.0.0.1:8000/books");
     setBooks(res.data);
@@ -65,7 +86,19 @@ function App() {
     await loadBooks();
     await loadStats();
   };
+  <h2>Top Rated Books</h2>
 
+{books
+  .filter((book) => Number(book.rating) >= 4)
+  .map((book) => (
+    <div
+      key={book.id}
+      className="book-card"
+    >
+      <strong>{book.title}</strong>
+      <p>⭐ {book.rating}</p>
+    </div>
+  ))}
   return (
     <div className="container">
       <h1 className="title">Book Buddy</h1>
@@ -91,7 +124,7 @@ function App() {
           <p>Wishlist</p>
         </div>
       </div>
-
+    
       <div className="form-card">
         <h2>Add Book</h2>
 
@@ -113,15 +146,26 @@ function App() {
           }
         />
 
-        <input
-          className="input"
-          placeholder="Genre"
-          value={form.genre}
-          onChange={(e) =>
-            setForm({ ...form, genre: e.target.value })
-          }
-        />
+<input
+  className="input"
+  placeholder="Genre"
+  value={form.genre}
+  onChange={(e) =>
+    setForm({ ...form, genre: e.target.value })
+  }
+/>
 
+{recommendations[form.genre] && (
+  <div className="recommendation-box">
+    <h4>Recommended Books</h4>
+
+    <ul>
+      {recommendations[form.genre].map((book) => (
+        <li key={book}>{book}</li>
+      ))}
+    </ul>
+  </div>
+)}
         <label className="label">
           Reading Status
         </label>
@@ -239,9 +283,14 @@ function App() {
           </p>
 
           <p>
-            <strong>Progress:</strong>{" "}
-            {book.progress}%
-          </p>
+  <strong>Progress:</strong> {book.progress}%
+</p>
+
+<progress
+  value={book.progress}
+  max="100"
+  className="progress-bar"
+></progress>
 
           <p>
             <strong>Rating:</strong> ⭐{" "}
