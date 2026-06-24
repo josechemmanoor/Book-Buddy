@@ -165,6 +165,6 @@ The application uses SQLite for persistent storage. SQLAlchemy ORM is used for d
 
 ## Author
 
-**Jose Che**
+**Jose Chemmanoor**
 
 B.Tech Computer Science and Engineering
